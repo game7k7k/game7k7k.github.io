@@ -5,7 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title data-i18n="meta.guide">NES play guide</title>
   <meta name="description" data-i18n-content="meta.guide" content="Original NES play guide: overview, goal, controls and tips." />
-  <link rel="stylesheet" href="style.css?v=20261008" />
+  <link rel="stylesheet" href="style.css?v=20261008-2" />
+  <meta name="theme-color" content="#0f1115" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <meta property="og:site_name" content="game7k7k NES Emulator" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:locale:alternate" content="zh_CN" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="canonical" href="https://game7k7k.github.io/guide.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="NES Play Guide · game7k7k" />
+  <meta property="og:description" content="Original NES play guide: overview, goal, controls and tips." />
+  <meta property="og:url" content="https://game7k7k.github.io/guide.html" />
+  <meta name="twitter:title" content="NES Play Guide · game7k7k" />
+  <meta name="twitter:description" content="Original NES play guide: overview, goal, controls and tips." />
   <style>
     .article { max-width: 760px; margin: 0 auto; padding: 16px 20px 32px; }
     .article h2 { font-size: 17px; margin: 22px 0 8px; }
@@ -48,6 +61,7 @@
       </div>
       <h2 data-i18n="guide.related" style="font-size:14px;color:var(--muted)">Related games</h2>
       <div class="related" id="g-related"></div>
+      <noscript><p style="font-size:13px"><a href="games.html">Back to the game library</a>.</p></noscript>
     </div>
     <!-- Google AdSense: paste your ad unit code here after approval -->
   </div>
@@ -57,9 +71,10 @@
     <a href="about.html" data-i18n="nav.about">About</a>
     <a href="contact.html" data-i18n="nav.contact">Contact</a>
     <a href="privacy.html" data-i18n="nav.privacy">Privacy Policy</a>
+    <a href="sitemap.html" data-i18n="nav.sitemap">Sitemap</a>
   </footer>
 
-  <script src="i18n.js?v=20261008"></script>
+  <script src="i18n.js?v=20261008-2"></script>
   <script>
     (function () {
       "use strict";
@@ -73,6 +88,20 @@
       var games = [];
       var guides = {};
       var currentId = null;
+      function setLDJSON(id, data) {
+        try {
+          var old = document.getElementById(id);
+          if (old && old.parentNode) old.parentNode.removeChild(old);
+          var s = document.createElement("script");
+          s.type = "application/ld+json";
+          s.id = id;
+          s.textContent = JSON.stringify(data);
+          document.head.appendChild(s);
+        } catch (e) {
+          /* noop */
+        }
+      }
+
 
       function qs(name) {
         try {
@@ -121,6 +150,34 @@
             bodyEl.appendChild(p);
           });
         });
+        try {
+          var canonUrl = "https://game7k7k.github.io/guide.html?game=" + encodeURIComponent(g.id);
+          var can = document.querySelector('link[rel="canonical"]');
+          if (can) can.setAttribute("href", canonUrl);
+          setLDJSON("ld-guide", {
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "Article",
+                headline: g.title + " Guide",
+                description: g.desc_en || g.desc,
+                inLanguage: zh ? "zh-CN" : "en",
+                author: { "@type": "Organization", name: "game7k7k" },
+                mainEntityOfPage: canonUrl
+              },
+              {
+                "@type": "BreadcrumbList",
+                itemListElement: [
+                  { "@type": "ListItem", position: 1, name: "Home", item: "https://game7k7k.github.io/" },
+                  { "@type": "ListItem", position: 2, name: "Games", item: "https://game7k7k.github.io/games.html" },
+                  { "@type": "ListItem", position: 3, name: g.title, item: canonUrl }
+                ]
+              }
+            ]
+          });
+        } catch (e) {
+          /* noop */
+        }
         playBtn.onclick = function () {
           window.location.href = withLang("index.html?game=" + encodeURIComponent(g.id));
         };

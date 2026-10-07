@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title data-i18n="sitemap.h1">🗺️ Sitemap</title>
+  <meta name="description" data-i18n-content="meta.sitemap" content="Sitemap of the game7k7k NES emulator site." />
+  <link rel="stylesheet" href="style.css?v=20261008-2" />
+  <meta name="theme-color" content="#0f1115" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <meta property="og:site_name" content="game7k7k NES Emulator" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:locale:alternate" content="zh_CN" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="canonical" href="https://game7k7k.github.io/sitemap.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Sitemap · game7k7k" />
+  <meta property="og:description" content="Sitemap of the game7k7k NES emulator site: all pages and game guides." />
+  <meta property="og:url" content="https://game7k7k.github.io/sitemap.html" />
+  <meta name="twitter:title" content="Sitemap · game7k7k" />
+  <meta name="twitter:description" content="Sitemap of the game7k7k NES emulator site: all pages and game guides." />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Sitemap game7k7k NES Emulator","url":"https://game7k7k.github.io/sitemap.html"}</script>
+  <style>
+    .article { max-width: 760px; margin: 0 auto; padding: 16px 20px 32px; }
+    .article h3 { font-size: 15px; margin: 18px 0 6px; }
+    .smap-list { list-style: none; margin: 0; padding: 0; }
+    .smap-list li { padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+    .smap-list li:last-child { border-bottom: none; }
+    .smap-list .f { font-size: 11px; color: var(--muted); font-family: ui-monospace, monospace; margin-left: 8px; }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html" class="brand"><h1 data-i18n="header.title">🎮 game7k7k · NES Online Emulator</h1></a>
+    <span class="badge">jsnes</span>
+    <p data-i18n="header.sub">Play instantly, no downloads. Keyboard / gamepad / touch supported.</p>
+    <span class="lang-select-wrap">
+      <select id="source-select" data-sourceselect aria-label="ROM source">
+        <option value="github">GitHub</option>
+        <option value="jsdelivr">jsDelivr</option>
+        <option value="gitee">Gitee</option>
+      </select>
+      <select id="lang-select" data-langselect aria-label="Language">
+        <option value="en">English</option>
+        <option value="zh">中文</option>
+      </select>
+    </span>
+  </header>
+
+  <div class="article">
+    <div class="panel">
+      <h2 data-i18n="sitemap.h1" style="margin-top:0">🗺️ Sitemap</h2>
+      <h3 data-i18n="sitemap.pages">Main pages</h3>
+      <ul class="smap-list">
+        <li><a href="index.html" data-i18n="header.title">🎮 game7k7k · NES Online Emulator</a></li>
+        <li><a href="games.html" data-i18n="nav.games">Games</a></li>
+        <li><a href="about.html" data-i18n="nav.about">About</a></li>
+        <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
+        <li><a href="privacy.html" data-i18n="nav.privacy">Privacy Policy</a></li>
+      </ul>
+      <h3 data-i18n="sitemap.guides">Game guides</h3>
+      <ul class="smap-list" id="smap-guides"></ul>
+      <noscript>
+        <ul class="smap-list">
+          <li><a href="guide.html?game=snow-bros-j">Snow Bros. (J)</a></li>
+          <li><a href="guide.html?game=lj65">LJ65</a></li>
+          <li><a href="guide.html?game=croom">Croom</a></li>
+        </ul>
+      </noscript>
+    </div>
+  </div>
+
+  <footer class="sitenav">
+    <a href="games.html" data-i18n="nav.games">Games</a>
+    <a href="about.html" data-i18n="nav.about">About</a>
+    <a href="contact.html" data-i18n="nav.contact">Contact</a>
+    <a href="privacy.html" data-i18n="nav.privacy">Privacy Policy</a>
+    <a href="sitemap.html" data-i18n="nav.sitemap">Sitemap</a>
+  </footer>
+
+  <script src="i18n.js?v=20261008-2"></script>
+  <script>
+    (function () {
+      "use strict";
+      var list = document.getElementById("smap-guides");
+      function withLang(url) {
+        var lang = window.__getLang ? window.__getLang() : "en";
+        var source = window.__getSource ? window.__getSource() : "github";
+        return url + "&lang=" + lang + "&source=" + source;
+      }
+      function render(games) {
+        list.innerHTML = "";
+        games.forEach(function (g) {
+          var li = document.createElement("li");
+          var a = document.createElement("a");
+          a.href = withLang("guide.html?game=" + encodeURIComponent(g.id));
+          a.textContent = window.__gameTitle ? window.__gameTitle(g) : g.title;
+          li.appendChild(a);
+          var f = document.createElement("span");
+          f.className = "f";
+          f.textContent = g.file;
+          li.appendChild(f);
+          list.appendChild(li);
+        });
+      }
+      window.__onLangChange = function () {
+        if (window.__lastGames) render(window.__lastGames);
+      };
+      fetch("games.json", { cache: "no-store" })
+        .then(function (r) {
+          if (!r.ok) throw new Error("games.json HTTP " + r.status);
+          return r.json();
+        })
+        .then(function (data) {
+          window.__lastGames = data;
+          render(data);
+        })
+        .catch(function () {
+          /* noscript fallback already lists guides */
+        });
+    })();
+  </script>
+</body>
+</html>

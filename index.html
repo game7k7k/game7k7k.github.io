@@ -5,7 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title data-i18n="meta.title">game7k7k · NES Online Emulator (jsnes)</title>
   <meta name="description" data-i18n-content="meta.index" content="Play NES games instantly in your browser." />
-  <link rel="stylesheet" href="style.css?v=20261008" />
+  <link rel="stylesheet" href="style.css?v=20261008-2" />
+  <meta name="theme-color" content="#0f1115" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <meta property="og:site_name" content="game7k7k NES Emulator" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:locale:alternate" content="zh_CN" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="canonical" href="https://game7k7k.github.io/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="game7k7k · NES Online Emulator (jsnes)" />
+  <meta property="og:description" content="Play NES games instantly in your browser. Remappable keys, gamepad and touch support, plus original play guides." />
+  <meta property="og:url" content="https://game7k7k.github.io/" />
+  <meta name="twitter:title" content="game7k7k · NES Online Emulator (jsnes)" />
+  <meta name="twitter:description" content="Play NES games instantly in your browser. Remappable keys, gamepad and touch support, plus original play guides." />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"game7k7k NES Emulator","url":"https://game7k7k.github.io/"}</script>
 </head>
 <body>
   <header>
@@ -93,6 +107,11 @@
         P2 <span id="keys-p2"></span><br />
         <span data-i18n="help.gamepad">Standard gamepads work plug-and-play.</span>
       </div>
+      <noscript>
+        <div class="panel">
+          <p style="font-size:13px">JavaScript is disabled. Browse the <a href="games.html">game library</a> and read the play guides: <a href="guide.html?game=snow-bros-j">Snow Bros.</a>, <a href="guide.html?game=lj65">LJ65 Tetris</a>, <a href="guide.html?game=croom">Croom</a>.</p>
+        </div>
+      </noscript>
     </section>
   </main>
 
@@ -101,11 +120,12 @@
     <a href="about.html" data-i18n="nav.about">About</a>
     <a href="contact.html" data-i18n="nav.contact">Contact</a>
     <a href="privacy.html" data-i18n="nav.privacy">Privacy Policy</a>
+    <a href="sitemap.html" data-i18n="nav.sitemap">Sitemap</a>
   </footer>
 
   <!-- jsnes 官方构建（CDN）。也可自行 npm run build 后改用本地 dist/jsnes.min.js -->
   <script src="https://unpkg.com/jsnes@2.1.0/dist/jsnes.min.js"></script>
-  <script src="i18n.js?v=20261008"></script>
-  <script src="app.js?v=20261008"></script>
+  <script src="i18n.js?v=20261008-2"></script>
+  <script src="app.js?v=20261008-2"></script>
 </body>
 </html>

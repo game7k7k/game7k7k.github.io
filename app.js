@@ -135,10 +135,47 @@
       b.appendChild(gl);
       gameListEl.appendChild(b);
     });
+    injectGameListLD();
   }
 
-  function findGame(id) {
-    for (var i = 0; i < games.length; i++) {
+  function setLDJSON(id, data) {
+    try {
+      var old = document.getElementById(id);
+      if (old && old.parentNode) old.parentNode.removeChild(old);
+      var s = document.createElement("script");
+      s.type = "application/ld+json";
+      s.id = id;
+      s.textContent = JSON.stringify(data);
+      document.head.appendChild(s);
+    } catch (e) {
+      /* noop */
+    }
+  }
+
+  function injectGameListLD() {
+    try {
+      var items = games.map(function (g, i) {
+        return {
+          "@type": "ListItem",
+          position: i + 1,
+          item: {
+            "@type": "VideoGame",
+            name: g.title,
+            url: "https://game7k7k.github.io/guide.html?game=" + encodeURIComponent(g.id),
+          },
+        };
+      });
+      setLDJSON("ld-games", {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        itemListElement: items,
+      });
+    } catch (e) {
+      /* noop */
+    }
+  }
+
+  function findGame(id) {    for (var i = 0; i < games.length; i++) {
       if (games[i].id === id) return games[i];
     }
     return null;
@@ -391,10 +428,10 @@
     { id: "p1-turboB", group: "P1", labelKey: "key.turboB", player: 1, btn: "BUTTON_TURBO_B", defCode: 74, defName: "J" },
     { id: "p1-start", group: "P1", labelKey: "key.start", player: 1, btn: "BUTTON_START", defCode: 13, defName: "Enter" },
     { id: "p1-select", group: "P1", labelKey: "key.select", player: 1, btn: "BUTTON_SELECT", defCode: 17, defName: "Right Ctrl" },
-    { id: "p2-up", group: "P2", labelKey: "key.up", player: 2, btn: "BUTTON_UP", defCode: 104, defName: "Num-8" },
-    { id: "p2-down", group: "P2", labelKey: "key.down", player: 2, btn: "BUTTON_DOWN", defCode: 98, defName: "Num-2" },
-    { id: "p2-left", group: "P2", labelKey: "key.left", player: 2, btn: "BUTTON_LEFT", defCode: 100, defName: "Num-4" },
-    { id: "p2-right", group: "P2", labelKey: "key.right", player: 2, btn: "BUTTON_RIGHT", defCode: 102, defName: "Num-6" },
+    { id: "p2-up", group: "P2", labelKey: "key.up", player: 2, btn: "BUTTON_UP", defCode: 38, defName: "Up" },
+    { id: "p2-down", group: "P2", labelKey: "key.down", player: 2, btn: "BUTTON_DOWN", defCode: 40, defName: "Down" },
+    { id: "p2-left", group: "P2", labelKey: "key.left", player: 2, btn: "BUTTON_LEFT", defCode: 37, defName: "Left" },
+    { id: "p2-right", group: "P2", labelKey: "key.right", player: 2, btn: "BUTTON_RIGHT", defCode: 39, defName: "Right" },
     { id: "p2-a", group: "P2", labelKey: "key.a", player: 2, btn: "BUTTON_A", defCode: 103, defName: "Num-7" },
     { id: "p2-b", group: "P2", labelKey: "key.b", player: 2, btn: "BUTTON_B", defCode: 105, defName: "Num-9" },
     { id: "p2-turboA", group: "P2", labelKey: "key.turboA", player: 2, btn: "BUTTON_TURBO_A", defCode: null, defName: null },
@@ -424,10 +461,10 @@
       105: [2, C.BUTTON_B, "Num-9"],
       99: [2, C.BUTTON_SELECT, "Num-3"],
       97: [2, C.BUTTON_START, "Num-1"],
-      104: [2, C.BUTTON_UP, "Num-8"],
-      98: [2, C.BUTTON_DOWN, "Num-2"],
-      100: [2, C.BUTTON_LEFT, "Num-4"],
-      102: [2, C.BUTTON_RIGHT, "Num-6"],
+      38: [2, C.BUTTON_UP, "Up"],
+      40: [2, C.BUTTON_DOWN, "Down"],
+      37: [2, C.BUTTON_LEFT, "Left"],
+      39: [2, C.BUTTON_RIGHT, "Right"],
     };
   }
 

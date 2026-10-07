@@ -5,7 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title data-i18n="lib.title">🎮 Game Library</title>
   <meta name="description" data-i18n-content="meta.lib" content="Browse all NES games with play guides." />
-  <link rel="stylesheet" href="style.css?v=20261008" />
+  <link rel="stylesheet" href="style.css?v=20261008-2" />
+  <meta name="theme-color" content="#0f1115" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <meta property="og:site_name" content="game7k7k NES Emulator" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:locale:alternate" content="zh_CN" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="canonical" href="https://game7k7k.github.io/games.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="🎮 Game Library · game7k7k" />
+  <meta property="og:description" content="Browse all NES games with original play guides. Click Play to load instantly in the emulator." />
+  <meta property="og:url" content="https://game7k7k.github.io/games.html" />
+  <meta name="twitter:title" content="🎮 Game Library · game7k7k" />
+  <meta name="twitter:description" content="Browse all NES games with original play guides. Click Play to load instantly in the emulator." />
   <style>
     .lib { max-width: 1000px; margin: 0 auto; padding: 16px 20px; }
     .lib-top { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
@@ -54,6 +67,9 @@
     </div>
     <div id="status" style="margin-bottom:10px" data-i18n="lib.loading">Loading…</div>
     <div class="grid" id="all-games"></div>
+    <noscript>
+      <div class="panel"><p style="font-size:13px">JavaScript is disabled. Play guides: <a href="guide.html?game=snow-bros-j">Snow Bros.</a>, <a href="guide.html?game=lj65">LJ65 Tetris</a>, <a href="guide.html?game=croom">Croom</a>.</p></div>
+    </noscript>
     <!-- Google AdSense: paste your ad unit code here after approval -->
   </div>
 
@@ -62,9 +78,10 @@
     <a href="about.html" data-i18n="nav.about">About</a>
     <a href="contact.html" data-i18n="nav.contact">Contact</a>
     <a href="privacy.html" data-i18n="nav.privacy">Privacy Policy</a>
+    <a href="sitemap.html" data-i18n="nav.sitemap">Sitemap</a>
   </footer>
 
-  <script src="i18n.js?v=20261008"></script>
+  <script src="i18n.js?v=20261008-2"></script>
   <script>
     (function () {
       "use strict";
@@ -73,6 +90,20 @@
       var searchEl = document.getElementById("search");
       var countEl = document.getElementById("count");
       var games = [];
+      function setLDJSON(id, data) {
+        try {
+          var old = document.getElementById(id);
+          if (old && old.parentNode) old.parentNode.removeChild(old);
+          var s = document.createElement("script");
+          s.type = "application/ld+json";
+          s.id = id;
+          s.textContent = JSON.stringify(data);
+          document.head.appendChild(s);
+        } catch (e) {
+          /* noop */
+        }
+      }
+
 
       function pageParams(id) {
         var lang = window.__getLang ? window.__getLang() : "en";
@@ -132,6 +163,25 @@
         var total = window.__t ? window.__t("lib.total", { n: games.length }) : games.length + " games";
         var matched = kw && window.__t ? window.__t("lib.matched", { n: shown }) : "";
         countEl.textContent = total + matched;
+        try {
+          setLDJSON("ld-games", {
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            itemListElement: games.map(function (g, i) {
+              return {
+                "@type": "ListItem",
+                position: i + 1,
+                item: {
+                  "@type": "VideoGame",
+                  name: g.title,
+                  url: "https://game7k7k.github.io/guide.html?game=" + encodeURIComponent(g.id)
+                }
+              };
+            })
+          });
+        } catch (e) {
+          /* noop */
+        }
         if (shown === 0) statusEl.textContent = window.__t ? window.__t("lib.none") : "No matching games";
         else statusEl.textContent = "";
       }

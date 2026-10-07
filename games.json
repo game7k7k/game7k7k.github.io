@@ -1,0 +1,26 @@
+[
+  {
+    "id": "snow-bros-j",
+    "title": "Snow Bros. (J)",
+    "title_zh": "雪人兄弟（日版）",
+    "file": "Snow Bros. (J).nes",
+    "desc": "经典平台跳跃动作游戏，日版",
+    "desc_en": "Classic platform action game, Japanese version"
+  },
+  {
+    "id": "croom",
+    "title": "Croom",
+    "title_zh": "Croom（演示版）",
+    "file": "croom.nes",
+    "desc": "Croom demo / homebrew ROM",
+    "desc_en": "Croom demo / homebrew ROM"
+  },
+  {
+    "id": "lj65",
+    "title": "LJ65",
+    "title_zh": "俄罗斯方块（LJ65）",
+    "file": "lj65.nes",
+    "desc": "俄罗斯方块游戏，jsnes 官方示例自带 ROM",
+    "desc_en": "Tetris game, ROM bundled with the official jsnes example"
+  }
+]

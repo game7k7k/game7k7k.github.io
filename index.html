@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title data-i18n="meta.title">game7k7k · NES Online Emulator (jsnes)</title>
+  <meta name="description" data-i18n-content="meta.index" content="Play NES games instantly in your browser." />
+  <link rel="stylesheet" href="style.css?v=20261008" />
+</head>
+<body>
+  <header>
+    <a href="index.html" class="brand"><h1 data-i18n="header.title">🎮 game7k7k · NES Online Emulator</h1></a>
+    <span class="badge">jsnes</span>
+    <p data-i18n="header.sub">Play instantly, no downloads. Keyboard / gamepad / touch supported.</p>
+    <span class="lang-select-wrap">
+      <select id="source-select" data-sourceselect aria-label="ROM source">
+        <option value="github">GitHub</option>
+        <option value="jsdelivr">jsDelivr</option>
+        <option value="gitee">Gitee</option>
+      </select>
+      <select id="lang-select" data-langselect aria-label="Language">
+        <option value="en">English</option>
+        <option value="zh">中文</option>
+      </select>
+    </span>
+  </header>
+
+  <main>
+    <aside class="panel">
+      <h2 data-i18n="games.title">Games</h2>
+      <div id="game-list"></div>
+      <a class="more-games" href="games.html" data-i18n="more.games">More games →</a>
+      <h2 style="margin-top:14px" data-i18n="local.title">Local ROM</h2>
+      <label class="file-btn" style="display:inline-block">
+        <span data-i18n="local.choose">Choose a .nes file</span>
+        <input id="file-input" type="file" accept=".nes,.bin" style="display:none" />
+      </label>
+      <p style="font-size:12px;color:var(--muted)" data-i18n="local.note">You can also load your own backup ROM file. It runs locally and is never uploaded.</p>
+    </aside>
+
+    <section class="emulator-wrap">
+      <div class="panel">
+        <div class="toolbar">
+          <button id="btn-start" class="primary" data-i18n="tb.start">Start Game</button>
+          <button id="btn-pause" disabled data-i18n="tb.pause">Pause</button>
+          <button id="btn-reset" disabled data-i18n="tb.reset">Reset</button>
+          <button id="btn-mute" data-i18n="tb.mute">Mute</button>
+          <button id="btn-shot" data-i18n="tb.shot">Screenshot</button>
+          <button id="btn-fullscreen" data-i18n="tb.full">Fullscreen</button>
+          <button id="btn-remap" data-i18n="tb.remap">Remap Keys</button>
+        </div>
+        <div class="progress" id="progress" style="margin-top:10px"><div id="progress-bar"></div></div>
+        <div id="status" style="margin-top:8px" data-i18n="status.loading">Loading game list…</div>
+      </div>
+
+      <div id="screen-container" class="panel" style="padding:0"></div>
+      <!-- Google AdSense: paste your ad unit code here after approval -->
+
+      <div class="panel touch-controls">
+        <div>
+          <div class="dpad">
+            <span></span><div class="tbtn" id="t-up">▲</div><span></span>
+            <div class="tbtn" id="t-left">◀</div><div class="tbtn" id="t-down">▼</div><div class="tbtn" id="t-right">▶</div>
+            <span></span><span></span><span></span>
+          </div>
+          <div class="sys-btns">
+            <div class="tbtn" id="t-select" style="flex:1">Select</div>
+            <div class="tbtn" id="t-start" style="flex:1">Start</div>
+          </div>
+        </div>
+        <div class="ab">
+          <div class="tbtn round" id="t-b">B</div>
+          <div class="tbtn round" id="t-a">A</div>
+        </div>
+      </div>
+
+      <div class="panel" id="keymap-panel" hidden>
+        <b style="color:var(--text);font-size:14px" data-i18n="km.title">Custom Keys (P1 / P2)</b>
+        <p style="font-size:12px;color:var(--muted);margin:6px 0 4px" data-i18n-html="km.desc">Click a key on the right, then press the new key. Press <kbd>Esc</kbd> to cancel. Changes apply instantly and are saved in this browser.</p>
+        <div class="keymap-tabs">
+          <button id="tab-p1" class="active" data-i18n="tab.p1">P1 Gamepad</button>
+          <button id="tab-p2" data-i18n="tab.p2">P2 Gamepad</button>
+        </div>
+        <div id="keymap-list"></div>
+        <div class="toolbar" style="margin-top:10px">
+          <button id="btn-keys-reset" data-i18n="km.reset">Reset to defaults</button>
+        </div>
+      </div>
+
+      <div class="panel keys">
+        <b style="color:var(--text)" data-i18n="help.title">Keyboard controls (click Remap Keys in the toolbar to customize P1 / P2)</b><br />
+        P1 <span id="keys-p1"></span><br />
+        P2 <span id="keys-p2"></span><br />
+        <span data-i18n="help.gamepad">Standard gamepads work plug-and-play.</span>
+      </div>
+    </section>
+  </main>
+
+  <footer class="sitenav">
+    <a href="games.html" data-i18n="nav.games">Games</a>
+    <a href="about.html" data-i18n="nav.about">About</a>
+    <a href="contact.html" data-i18n="nav.contact">Contact</a>
+    <a href="privacy.html" data-i18n="nav.privacy">Privacy Policy</a>
+  </footer>
+
+  <!-- jsnes 官方构建（CDN）。也可自行 npm run build 后改用本地 dist/jsnes.min.js -->
+  <script src="https://unpkg.com/jsnes@2.1.0/dist/jsnes.min.js"></script>
+  <script src="i18n.js?v=20261008"></script>
+  <script src="app.js?v=20261008"></script>
+</body>
+</html>

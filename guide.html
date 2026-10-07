@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title data-i18n="meta.guide">NES play guide</title>
+  <meta name="description" data-i18n-content="meta.guide" content="Original NES play guide: overview, goal, controls and tips." />
+  <link rel="stylesheet" href="style.css?v=20261008" />
+  <style>
+    .article { max-width: 760px; margin: 0 auto; padding: 16px 20px 32px; }
+    .article h2 { font-size: 17px; margin: 22px 0 8px; }
+    .article p { font-size: 14px; line-height: 1.9; color: var(--text); margin: 0 0 10px; }
+    .guide-meta { font-size: 12px; color: var(--muted); margin: 6px 0 4px; }
+    .guide-nav { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 18px; }
+    .related { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html" class="brand"><h1 data-i18n="header.title">🎮 game7k7k · NES Online Emulator</h1></a>
+    <span class="badge">jsnes</span>
+    <p data-i18n="header.sub">Play instantly, no downloads. Keyboard / gamepad / touch supported.</p>
+    <span class="lang-select-wrap">
+      <select id="source-select" data-sourceselect aria-label="ROM source">
+        <option value="github">GitHub</option>
+        <option value="jsdelivr">jsDelivr</option>
+        <option value="gitee">Gitee</option>
+      </select>
+      <select id="lang-select" data-langselect aria-label="Language">
+        <option value="en">English</option>
+        <option value="zh">中文</option>
+      </select>
+    </span>
+  </header>
+
+  <div class="article">
+    <div class="panel">
+      <h2 id="g-title" style="margin:0"></h2>
+      <div class="guide-meta" id="g-meta"></div>
+      <div id="g-body"></div>
+      <div class="guide-nav">
+        <button id="g-play" class="primary" data-i18n="guide.play">Play Now</button>
+        <a id="g-back" href="games.html" style="text-decoration:none"><button data-i18n="guide.back">← Back to Library</button></a>
+      </div>
+      <div class="guide-nav">
+        <button id="g-prev" data-i18n="guide.prev">← Prev</button>
+        <button id="g-next" data-i18n="guide.next">Next →</button>
+      </div>
+      <h2 data-i18n="guide.related" style="font-size:14px;color:var(--muted)">Related games</h2>
+      <div class="related" id="g-related"></div>
+    </div>
+    <!-- Google AdSense: paste your ad unit code here after approval -->
+  </div>
+
+  <footer class="sitenav">
+    <a href="games.html" data-i18n="nav.games">Games</a>
+    <a href="about.html" data-i18n="nav.about">About</a>
+    <a href="contact.html" data-i18n="nav.contact">Contact</a>
+    <a href="privacy.html" data-i18n="nav.privacy">Privacy Policy</a>
+  </footer>
+
+  <script src="i18n.js?v=20261008"></script>
+  <script>
+    (function () {
+      "use strict";
+      var titleEl = document.getElementById("g-title");
+      var metaEl = document.getElementById("g-meta");
+      var bodyEl = document.getElementById("g-body");
+      var playBtn = document.getElementById("g-play");
+      var prevBtn = document.getElementById("g-prev");
+      var nextBtn = document.getElementById("g-next");
+      var relatedEl = document.getElementById("g-related");
+      var games = [];
+      var guides = {};
+      var currentId = null;
+
+      function qs(name) {
+        try {
+          return new URL(window.location.href).searchParams.get(name);
+        } catch (e) {
+          return null;
+        }
+      }
+      function lang() {
+        return window.__getLang ? window.__getLang() : "en";
+      }
+      function titleOf(g) {
+        return window.__gameTitle ? window.__gameTitle(g) : g.title;
+      }
+      function withLang(url) {
+        var sep = url.indexOf("?") < 0 ? "?" : "&";
+        var source = window.__getSource ? window.__getSource() : "github";
+        return url + sep + "lang=" + lang() + "&source=" + source;
+      }
+
+      function render() {
+        var g = null;
+        for (var i = 0; i < games.length; i++) {
+          if (games[i].id === currentId) g = games[i];
+        }
+        var gd = guides[currentId];
+        if (!g || !gd) {
+          titleEl.textContent = window.__t ? window.__t("guide.notfound") : "Guide not found.";
+          metaEl.textContent = "";
+          bodyEl.innerHTML = "";
+          document.title = window.__t ? window.__t("guide.notfound") : "Guide not found.";
+          return;
+        }
+        var zh = lang() === "zh";
+        titleEl.textContent = titleOf(g) + " - " + (window.__t ? window.__t("guide.titleSuffix") : "Guide");
+        document.title = titleEl.textContent;
+        metaEl.textContent = (zh ? gd.genre : gd.genre_en) + " • " + g.file;
+        bodyEl.innerHTML = "";
+        gd.sections.forEach(function (s) {
+          var h = document.createElement("h2");
+          h.textContent = zh ? s.h : s.h_en;
+          bodyEl.appendChild(h);
+          (zh ? s.p : s.p_en).forEach(function (para) {
+            var p = document.createElement("p");
+            p.textContent = para;
+            bodyEl.appendChild(p);
+          });
+        });
+        playBtn.onclick = function () {
+          window.location.href = withLang("index.html?game=" + encodeURIComponent(g.id));
+        };
+        var idx = games.indexOf(g);
+        var prev = games[(idx - 1 + games.length) % games.length];
+        var next = games[(idx + 1) % games.length];
+        prevBtn.onclick = function () {
+          window.location.href = withLang("guide.html?game=" + encodeURIComponent(prev.id));
+        };
+        nextBtn.onclick = function () {
+          window.location.href = withLang("guide.html?game=" + encodeURIComponent(next.id));
+        };
+        relatedEl.innerHTML = "";
+        games.forEach(function (o) {
+          if (o.id === g.id) return;
+          var a = document.createElement("button");
+          a.textContent = titleOf(o);
+          a.addEventListener("click", function () {
+            window.location.href = withLang("guide.html?game=" + encodeURIComponent(o.id));
+          });
+          relatedEl.appendChild(a);
+        });
+      }
+
+      window.__onLangChange = render;
+      currentId = qs("game");
+      Promise.all([
+        fetch("games.json", { cache: "no-store" }).then(function (r) {
+          if (!r.ok) throw new Error("games.json HTTP " + r.status);
+          return r.json();
+        }),
+        fetch("guides.json", { cache: "no-store" }).then(function (r) {
+          if (!r.ok) throw new Error("guides.json HTTP " + r.status);
+          return r.json();
+        })
+      ])
+        .then(function (res) {
+          games = res[0];
+          res[1].forEach(function (gd) {
+            guides[gd.id] = gd;
+          });
+          render();
+        })
+        .catch(function (e) {
+          titleEl.textContent = String((window.__t ? window.__t("guide.notfound") : "Guide not found.") + " (" + e.message + ")");
+        });
+    })();
+  </script>
+</body>
+</html>

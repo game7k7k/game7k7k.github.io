@@ -1,0 +1,167 @@
+[
+  {
+    "id": "snow-bros-j",
+    "genre": "平台跳跃 / 动作",
+    "genre_en": "Platform / Action",
+    "sections": [
+      {
+        "h": "游戏简介",
+        "h_en": "Overview",
+        "p": [
+          "《雪人兄弟》是 Toaplan 于 1990 年推出的街机平台跳跃动作游戏，后移植到 FC / NES。本站收录的是日版 ROM，打开页面即可直接游玩。",
+          "故事里 Nick 与 Tom 两兄弟被魔王变成了雪人，为了营救被抓走的公主，他们一路喷雪战斗，关卡越往后敌人越多、速度越快。"
+        ],
+        "p_en": [
+          "Snow Bros. is a platform action game released by Toaplan in arcades in 1990 and later ported to the NES. This site hosts the Japanese ROM, playable instantly in your browser.",
+          "Brothers Nick and Tom have been turned into snowmen by a demon king. To rescue the kidnapped princesses, they fight onward with snow spray as enemies grow faster and fiercer."
+        ]
+      },
+      {
+        "h": "玩法目标",
+        "h_en": "How to win",
+        "p": [
+          "每一关都会出现若干怪物，朝敌人连续喷雪，把它整个裹成大雪球，再推动雪球撞倒沿途的敌人。将全场敌人消灭干净即可过关，每隔若干关会有 Boss 守关。",
+          "被裹成雪球的敌人如果长时间不管，会挣脱并变得更快，所以裹住之后要尽快推走。"
+        ],
+        "p_en": [
+          "Each stage spawns a set of monsters. Cover an enemy in snow until it becomes a giant snowball, then push it to knock out everything in its path. Clear all enemies to advance; a boss guards every few stages.",
+          "A snowed-up enemy left alone will break free and move faster, so push the snowball away quickly."
+        ]
+      },
+      {
+        "h": "操作说明",
+        "h_en": "Controls",
+        "p": [
+          "方向键负责移动，跳跃与喷雪分别对应手柄的 A / B 两键（本站 P1 默认按键为 U、I）。进入游戏后可以先试按几下确认手感。",
+          "所有按键都可以在工具栏「改键」里自定义，同时支持手柄即插即玩和触屏按钮。"
+        ],
+        "p_en": [
+          "Move with the D-pad; jumping and snow spray map to the gamepad A / B buttons (P1 defaults here are U and I). Press them a few times after the game starts to get a feel.",
+          "Every key can be remapped under Remap Keys in the toolbar, and gamepads plus touch buttons work too."
+        ]
+      },
+      {
+        "h": "进阶技巧",
+        "h_en": "Tips",
+        "p": [
+          "把敌人完全裹住再推，雪球越大、撞到的敌人越多；推动的大雪球能连锁撞倒一串敌人，一次清屏的分数更高。",
+          "敌人掉落的食物可以加分，有助于冲击高分与隐藏奖励；注意不要站在雪球的滚动路线上，否则会被自己的雪球撞倒。双人游玩时一人引怪、一人推球，配合起来过关更快。"
+        ],
+        "p_en": [
+          "Wrap enemies fully before pushing: bigger snowballs hit more enemies, and one rolling snowball can chain-knock a whole line for a bigger score.",
+          "Grab the food dropped by enemies for points and bonus chances. Never stand in a snowball's rolling path, or it will knock you down. In 2-player mode, have one player lure monsters while the other pushes snowballs to clear stages faster."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "lj65",
+    "genre": "益智 / 俄罗斯方块",
+    "genre_en": "Puzzle / Tetris",
+    "sections": [
+      {
+        "h": "游戏简介",
+        "h_en": "Overview",
+        "p": [
+          "LJ65 是 NES 平台的俄罗斯方块类型 ROM，也是 jsnes 官方示例自带的演示游戏，规则与经典俄罗斯方块完全一致。",
+          "各种形状的方块从顶部不断下落，把它们堆放整齐、消除得分，考验反应与规划能力。"
+        ],
+        "p_en": [
+          "LJ65 is a Tetris-style ROM for the NES and the demo game bundled with the official jsnes example. Its rules match classic Tetris exactly.",
+          "Blocks of various shapes keep falling from the top. Stack them neatly, clear lines for points, and test your reflexes and planning."
+        ]
+      },
+      {
+        "h": "玩法目标",
+        "h_en": "How to win",
+        "p": [
+          "左右移动并旋转下落的方块，把它们严丝合缝地堆在底部；当某一整行被填满时即可消除得分。",
+          "方块堆到顶部即告结束，目标是尽可能拿到更高分数、坚持更长时间。"
+        ],
+        "p_en": [
+          "Move and rotate falling pieces to pack them tightly at the bottom. Fill an entire row to clear it for points.",
+          "The game ends when the stack reaches the top, so aim for the highest score and the longest survival."
+        ]
+      },
+      {
+        "h": "操作说明",
+        "h_en": "Controls",
+        "p": [
+          "方向键左右移动方块，A / B 键旋转或加速下落（具体以游戏内为准，本站 P1 默认按键为 U、I），Enter 开始或暂停。",
+          "全部按键都可以在工具栏「改键」中自定义，也支持手柄与触屏操作。"
+        ],
+        "p_en": [
+          "Move pieces left and right with the D-pad; the A / B buttons rotate or soft-drop (check in-game; P1 defaults here are U and I), and Enter starts or pauses.",
+          "All keys can be customized under Remap Keys, with gamepad and touch support included."
+        ]
+      },
+      {
+        "h": "进阶技巧",
+        "h_en": "Tips",
+        "p": [
+          "尽量保持栈面平整，避免出现填不上的深洞；预留一竖列专门等长条，一次消除四行得分最高。",
+          "方块尽量往低处放，不要过早把两边堆高；提前看“下一个方块”预览，规划好落点再下手，高手都是走一步看两步。"
+        ],
+        "p_en": [
+          "Keep the stack surface flat and avoid deep holes you cannot fill. Reserve one vertical column for the long bar to score a four-line Tetris.",
+          "Place pieces low instead of stacking the sides early. Watch the next-piece preview and plan each landing ahead—masters always think two moves forward."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "croom",
+    "genre": "Homebrew / 演示",
+    "genre_en": "Homebrew / Demo",
+    "sections": [
+      {
+        "h": "游戏简介",
+        "h_en": "Overview",
+        "p": [
+          "Croom 是社区流传的 NES homebrew 演示 ROM，体积很小，主要用于模拟器测试与尝鲜，目前还没有整理出完整的玩法资料。",
+          "如果你只是想体验模拟器，可以先从它入手；想认真玩一局，更推荐雪人兄弟或俄罗斯方块。"
+        ],
+        "p_en": [
+          "Croom is a small homebrew demo ROM circulating in the community, mainly used for emulator testing. No complete gameplay documentation exists for it yet.",
+          "It is fine for a quick emulator trial, but for a real game, try Snow Bros. or LJ65 Tetris instead."
+        ]
+      },
+      {
+        "h": "上手方法",
+        "h_en": "Getting started",
+        "p": [
+          "在模拟器中载入后按 Start（本站默认 Enter）进入；用方向键移动、A / B 键（默认 U / I）试探交互。",
+          "如果画面长时间没有反应，可以点工具栏「复位」重来，或者换一款游戏游玩。"
+        ],
+        "p_en": [
+          "After loading, press Start (Enter by default here) to enter. Probe the controls with the D-pad and the A / B buttons (U / I by default).",
+          "If nothing responds for a while, hit Reset in the toolbar or switch to another game."
+        ]
+      },
+      {
+        "h": "操作说明",
+        "h_en": "Controls",
+        "p": [
+          "通用键位请参考模拟器页下方的键盘说明，所有按键都可以在「改键」中自定义；触屏设备可以直接使用屏幕按钮操作。",
+          "标准手柄插上即可使用，无需额外设置。"
+        ],
+        "p_en": [
+          "See the keyboard reference below the emulator for default keys; everything can be remapped under Remap Keys, and touch devices can use the on-screen buttons.",
+          "Standard gamepads work as soon as you plug them in, with no setup needed."
+        ]
+      },
+      {
+        "h": "帮我们补完攻略",
+        "h_en": "Help complete this guide",
+        "p": [
+          "如果你摸清了 Croom 的玩法，欢迎通过「联系」页告诉我们，我们核实后会把攻略补全，帮助更多玩家。",
+          "原创的玩法心得同样欢迎投稿，优质内容会署名收录。"
+        ],
+        "p_en": [
+          "If you figure out how Croom plays, tell us via the Contact page and we will complete this guide after verifying, helping more players.",
+          "Original gameplay write-ups are welcome too, and quality submissions will be credited."
+        ]
+      }
+    ]
+  }
+]

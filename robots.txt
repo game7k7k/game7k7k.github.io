@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://game7k7k.github.io/sitemap.xml

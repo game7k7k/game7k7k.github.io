@@ -76,6 +76,16 @@
       setStatus(__t("s.cdn"), true);
       return null;
     }
+    // 默认键位变更时丢弃本机旧存档，否则 localStorage 里的老绑定会盖住新默认。
+    // 改默认键时同步 bump 此版本号（会重置一次用户自定义键位）。
+    try {
+      if (window.localStorage.getItem("keys_ver") !== "20261012-p2arrows") {
+        window.localStorage.removeItem("keys");
+        window.localStorage.setItem("keys_ver", "20261012-p2arrows");
+      }
+    } catch (e) {
+      /* noop */
+    }
     // jsnes.Browser handles canvas / audio / keyboard / gamepad automatically.
     // See: https://github.com/bfirsh/jsnes#browser
     browser = new jsnes.Browser({

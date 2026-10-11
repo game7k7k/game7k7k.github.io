@@ -36,8 +36,19 @@ header .badge {
   padding: 2px 10px;
   color: var(--muted);
 }
-.lang-select-wrap { margin-left: auto; display: flex; gap: 6px; }
-.lang-select-wrap select {
+.header-picks { margin-left: auto; display: flex; gap: 6px; align-items: center; }
+.lang-link {
+  display: inline-block;
+  background: #222936;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-size: 13px;
+  text-decoration: none;
+}
+.lang-link:hover { border-color: var(--accent); }
+.header-picks select {
   background: #222936;
   color: var(--text);
   border: 1px solid var(--border);

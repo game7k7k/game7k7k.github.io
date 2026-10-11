@@ -225,22 +225,59 @@
     }
   };
 
+  // Page language is fixed by URL: root pages are English, /zh/ pages are Chinese.
+  // There is no runtime language switching anymore (it caused stale-cache confusion);
+  // cross-language navigation is done via plain links, with hreflang annotations.
   var lang = "en";
+  try {
+    var docLang = String(document.documentElement.lang || "en").toLowerCase();
+    if (docLang.indexOf("zh") === 0) lang = "zh";
+  } catch (e0) {
+    /* keep default */
+  }
+
+  // Map a path + legacy ?lang= value to the counterpart URL (testable pure logic).
+  // Returns null when already on the right version.
+  function resolveLangTarget(pathname, q, isZhPage) {
+    if ((q === "zh") === isZhPage) return null;
+    var parts = String(pathname).split("/").filter(function (p) {
+      return p.length > 0;
+    });
+    var last = parts.length ? parts[parts.length - 1] : "";
+    var isFile = /\.html?$/i.test(last);
+    var dirs = isFile ? parts.slice(0, -1) : parts;
+    var targetParts;
+    if (q === "zh") {
+      targetParts = dirs.concat(["zh", isFile ? last : "index.html"]);
+    } else {
+      var dp = dirs.slice();
+      var zi = dp.indexOf("zh");
+      if (zi < 0) return null;
+      dp.splice(zi, 1);
+      targetParts = dp.concat([isFile ? last : "index.html"]);
+    }
+    return "/" + targetParts.join("/");
+  }
+
+  // Old shared links like index.html?lang=zh keep working via redirect.
+  try {
+    var q = new URL(window.location.href).searchParams.get("lang");
+    if ((q === "zh" && lang !== "zh") || (q === "en" && lang !== "en")) {
+      var u = new URL(window.location.href);
+      var target = resolveLangTarget(u.pathname, q, lang === "zh");
+      if (target && target !== u.pathname) {
+        u.searchParams.delete("lang");
+        var qs = u.searchParams.toString();
+        window.location.replace(target + (qs ? "?" + qs : ""));
+      }
+    }
+  } catch (e1) {
+    /* noop */
+  }
+
   var SOURCE_IDS = ["github", "jsdelivr", "gitee"];
   var source = "github";
   try {
-    var q = new URL(window.location.href).searchParams.get("lang");
-    if (q === "en" || q === "zh") {
-      lang = q;
-      try {
-        window.localStorage.setItem("lang", q);
-      } catch (e2) {
-        /* noop */
-      }
-    } else {
-      var s = window.localStorage.getItem("lang");
-      if (s === "en" || s === "zh") lang = s;
-    }
     var qs = new URL(window.location.href).searchParams.get("source");
     if (SOURCE_IDS.indexOf(qs) >= 0) {
       source = qs;
@@ -255,6 +292,27 @@
     }
   } catch (e) {
     /* keep defaults */
+  }
+
+  // Shared JS/data live next to the EN pages; /zh/ pages load them via ../ .
+  // Derive the asset base from this script's own URL so every depth works.
+  function assetBase() {
+    try {
+      var scripts = document.getElementsByTagName("script");
+      for (var i = scripts.length - 1; i >= 0; i--) {
+        var s = scripts[i].getAttribute("src") || "";
+        var idx = s.indexOf("i18n.js");
+        if (idx >= 0) return s.slice(0, idx);
+      }
+    } catch (e) {
+      /* noop */
+    }
+    try {
+      if (window.location.pathname.indexOf("/zh/") >= 0) return "../";
+    } catch (e2) {
+      /* noop */
+    }
+    return "";
   }
 
   function t(key, vars) {
@@ -287,39 +345,30 @@
     var cts = document.querySelectorAll("[data-i18n-content]");
     for (var n = 0; n < cts.length; n++) cts[n].setAttribute("content", t(cts[n].getAttribute("data-i18n-content")));
     document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
-    var sels = document.querySelectorAll("select[data-langselect]");
-    for (var m = 0; m < sels.length; m++) sels[m].value = lang;
     var ssrc = document.querySelectorAll("select[data-sourceselect]");
     for (var n2 = 0; n2 < ssrc.length; n2++) ssrc[n2].value = source;
   }
 
-  function setLang(l) {
-    if (l !== "en" && l !== "zh") return;
-    lang = l;
-    try {
-      window.localStorage.setItem("lang", l);
-    } catch (e) {
-      /* noop */
-    }
-    try {
-      var u = new URL(window.location.href);
-      u.searchParams.set("lang", l);
-      window.history.replaceState(null, "", u.toString());
-    } catch (e) {
-      /* noop */
-    }
-    applyStatic();
-    if (window.__onLangChange) window.__onLangChange();
-  }
-
   function initSwitcher() {
-    var sels = document.querySelectorAll("select[data-langselect]");
-    for (var i = 0; i < sels.length; i++) {
-      (function (s) {
-        s.addEventListener("change", function () {
-          setLang(s.value);
+    // 跨语言跳转：点击瞬间按当前地址实时拼接参数（game/source），去掉已废弃的 lang。
+    // 不在初始化时写死 href，否则后续 URL 变化（加载游戏/切换数据源）会导致参数过期。
+    // JS 禁用时回退为纯静态 href（无参数也能用）。
+    var links = document.querySelectorAll("a.lang-link");
+    for (var k = 0; k < links.length; k++) {
+      (function (a) {
+        var base = (a.getAttribute("href") || "").split("?")[0];
+        a.addEventListener("click", function () {
+          var s = "";
+          try {
+            var sp = new URLSearchParams(window.location.search);
+            sp.delete("lang");
+            s = sp.toString();
+          } catch (e0) {
+            /* noop */
+          }
+          a.setAttribute("href", base + (s ? "?" + s : ""));
         });
-      })(sels[i]);
+      })(links[k]);
     }
     var ssrc = document.querySelectorAll("select[data-sourceselect]");
     for (var j = 0; j < ssrc.length; j++) {
@@ -351,10 +400,11 @@
   }
 
   window.__t = t;
+  window.__asset = assetBase;
+  window.__resolveLangTarget = resolveLangTarget;
   window.__getLang = function () {
     return lang;
   };
-  window.__setLang = setLang;
   window.__getSource = function () {
     return source;
   };

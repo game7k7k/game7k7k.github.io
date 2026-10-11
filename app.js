@@ -57,13 +57,7 @@
   }
 
   function pageParams(id) {
-    var lang = "en";
-    try {
-      if (window.__getLang) lang = window.__getLang();
-    } catch (e) {
-      /* noop */
-    }
-    return "?game=" + encodeURIComponent(id) + "&lang=" + lang + "&source=" + getSource();
+    return "?game=" + encodeURIComponent(id) + "&source=" + getSource();
   }
 
   function setStatus(msg, isError) {
@@ -707,8 +701,22 @@
     });
   }
 
+  // 浏览器自动播放策略：无手势时 AudioContext 处于 suspended。
+  // 游戏照常自动开始（画面先行），首次按键/点击时恢复声音。
+  function unlockAudio() {
+    try {
+      var ctx =
+        browser && browser._speakers && (browser._speakers.context || browser._speakers.audioContext);
+      if (ctx && ctx.state === "suspended") ctx.resume();
+    } catch (e) {
+      /* noop */
+    }
+  }
+  document.addEventListener("pointerdown", unlockAudio);
+  document.addEventListener("keydown", unlockAudio);
+
   // ---- boot ----
-  fetch("games.json", { cache: "no-store" })
+  fetch((window.__asset ? window.__asset() : "") + "games.json", { cache: "no-store" })
     .then(function (r) {
       if (!r.ok) throw new Error("games.json HTTP " + r.status);
       return r.json();
@@ -727,12 +735,8 @@
       if (q && findGame(q)) {
         loadGame(q);
       } else if (games.length > 0) {
-        // 默认选中第一个，但不自动开始（等待用户手势以允许 AudioContext 播放声音）
-        currentGameId = games[0].id;
-        renderList();
-        setStatus(__t("status.selectFirst"));
-        var startBtn = document.getElementById("btn-start");
-        if (startBtn) startBtn.style.display = "";
+        // 首屏自动开始第一个游戏
+        loadGame(games[0].id);
       }
     })
     .catch(function (e) {
@@ -754,15 +758,6 @@
     } else {
       renderList();
     }
-  };
-
-  // 语言切换时重渲染动态文案（静态文案由 i18n.js 统一处理）
-  window.__onLangChange = function () {
-    renderList();
-    refreshHelp();
-    if (browser && keymapPanel && !keymapPanel.hasAttribute("hidden")) renderKeymap();
-    btnMute.textContent = muted ? __t("tb.unmute") : __t("tb.mute");
-    updateButtons();
   };
 
   refreshHelp();

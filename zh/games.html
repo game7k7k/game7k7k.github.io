@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title data-i18n="lib.title">🎮 游戏列表</title>
+  <meta name="description" content="浏览全部 NES 游戏与原创攻略，点击开始游玩即刻在模拟器中加载。" />
+  <link rel="stylesheet" href="../style.css?v=20261011-2" />
+  <meta name="theme-color" content="#0f1115" />
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <meta property="og:site_name" content="game7k7k NES Emulator" />
+  <meta property="og:locale" content="zh_CN" />
+  <meta property="og:locale:alternate" content="en_US" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="canonical" href="https://game7k7k.github.io/zh/games.html" />
+  <link rel="alternate" hreflang="en" href="https://game7k7k.github.io/games.html" />
+  <link rel="alternate" hreflang="zh" href="https://game7k7k.github.io/zh/games.html" />
+  <link rel="alternate" hreflang="x-default" href="https://game7k7k.github.io/games.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="🎮 游戏列表" />
+  <meta property="og:description" content="浏览全部 NES 游戏与原创攻略，点击开始游玩即刻在模拟器中加载。" />
+  <meta property="og:url" content="https://game7k7k.github.io/zh/games.html" />
+  <meta name="twitter:title" content="🎮 游戏列表" />
+  <meta name="twitter:description" content="浏览全部 NES 游戏与原创攻略，点击开始游玩即刻在模拟器中加载。" />
+  <style>
+    .lib { max-width: 1000px; margin: 0 auto; padding: 16px 20px; }
+    .lib-top { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+    .lib-top input {
+      flex: 1; min-width: 180px;
+      background: #0f1319; color: var(--text);
+      border: 1px solid var(--border); border-radius: 8px;
+      padding: 8px 12px; font-size: 13px;
+    }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+    .card {
+      background: var(--panel); border: 1px solid var(--border);
+      border-radius: 12px; padding: 14px;
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .card:hover { border-color: var(--accent); }
+    .card .t { font-weight: 600; font-size: 15px; }
+    .card .d { font-size: 12px; color: var(--muted); flex: 1; }
+    .card .f { font-size: 11px; color: var(--muted); font-family: ui-monospace, monospace; }
+    .card-row { display: flex; gap: 8px; }
+    .card-row button { flex: 1; }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html" class="brand"><h1 data-i18n="lib.title">🎮 游戏列表</h1></a>
+    <p data-i18n="lib.sub">点击「开始游玩」跳回模拟器自动加载。</p>
+    <span class="header-picks">
+      <select id="source-select" data-sourceselect aria-label="ROM source">
+        <option value="github">GitHub</option>
+        <option value="jsdelivr">jsDelivr</option>
+        <option value="gitee">Gitee</option>
+      </select>
+      <a class="lang-link" href="../games.html">English</a>
+    </span>
+  </header>
+
+  <div class="lib">
+    <div class="lib-top panel">
+      <a href="index.html" style="text-decoration:none"><button data-i18n="lib.back">← 返回模拟器</button></a>
+      <input id="search" type="search" placeholder="搜索游戏…" />
+      <span id="count" style="font-size:12px;color:var(--muted)"></span>
+    </div>
+    <div id="status" style="margin-bottom:10px" data-i18n="lib.loading">正在加载…</div>
+    <div class="grid" id="all-games"></div>
+    <noscript>
+      <div class="panel"><p style="font-size:13px">JavaScript is disabled. Play guides: <a href="guide.html?game=snow-bros-j">Snow Bros.</a>, <a href="guide.html?game=lj65">LJ65 Tetris</a>, <a href="guide.html?game=croom">Croom</a>.</p></div>
+    </noscript>
+    <!-- Google AdSense: paste your ad unit code here after approval -->
+  </div>
+
+  <footer class="sitenav">
+    <a href="games.html" data-i18n="nav.games">游戏列表</a>
+    <a href="about.html" data-i18n="nav.about">关于</a>
+    <a href="contact.html" data-i18n="nav.contact">联系</a>
+    <a href="privacy.html" data-i18n="nav.privacy">隐私政策</a>
+    <a href="sitemap.html" data-i18n="nav.sitemap">站点地图</a>
+  </footer>
+
+  <script src="../i18n.js?v=20261011-2"></script>
+  <script>
+    (function () {
+      "use strict";
+      var grid = document.getElementById("all-games");
+      var statusEl = document.getElementById("status");
+      var searchEl = document.getElementById("search");
+      var countEl = document.getElementById("count");
+      var games = [];
+      function setLDJSON(id, data) {
+        try {
+          var old = document.getElementById(id);
+          if (old && old.parentNode) old.parentNode.removeChild(old);
+          var s = document.createElement("script");
+          s.type = "application/ld+json";
+          s.id = id;
+          s.textContent = JSON.stringify(data);
+          document.head.appendChild(s);
+        } catch (e) {
+          /* noop */
+        }
+      }
+
+
+      function pageParams(id) {
+        var source = window.__getSource ? window.__getSource() : "github";
+        return "?game=" + encodeURIComponent(id) + "&source=" + source;
+      }
+
+      function titleOf(g) {
+        return window.__gameTitle ? window.__gameTitle(g) : g.title;
+      }
+
+      function descOf(g) {
+        return window.__gameDesc ? window.__gameDesc(g) : g.desc_en || g.desc || g.file;
+      }
+
+      function render() {
+        var filter = searchEl.value;
+        grid.innerHTML = "";
+        var kw = (filter || "").trim().toLowerCase();
+        var shown = 0;
+        games.forEach(function (g) {
+          var hay = (g.title + " " + (g.title_zh || "") + " " + descOf(g) + " " + g.file).toLowerCase();
+          if (kw && hay.indexOf(kw) < 0) return;
+          shown++;
+          var card = document.createElement("div");
+          card.className = "card";
+          var t = document.createElement("div");
+          t.className = "t";
+          t.textContent = titleOf(g);
+          var d = document.createElement("div");
+          d.className = "d";
+          d.textContent = descOf(g);
+          var f = document.createElement("div");
+          f.className = "f";
+          f.textContent = g.file;
+          var btn = document.createElement("button");
+          btn.className = "primary";
+          btn.textContent = window.__t ? window.__t("lib.play") : "Play";
+          btn.addEventListener("click", function () {
+            window.location.href = "index.html" + pageParams(g.id);
+          });
+          var gdb = document.createElement("button");
+          gdb.textContent = window.__t ? window.__t("guide.link") : "Guide";
+          gdb.addEventListener("click", function () {
+            window.location.href = "guide.html" + pageParams(g.id);
+          });
+          var row = document.createElement("div");
+          row.className = "card-row";
+          row.appendChild(btn);
+          row.appendChild(gdb);
+          card.appendChild(t);
+          card.appendChild(d);
+          card.appendChild(f);
+          card.appendChild(row);
+          grid.appendChild(card);
+        });
+        var total = window.__t ? window.__t("lib.total", { n: games.length }) : games.length + " games";
+        var matched = kw && window.__t ? window.__t("lib.matched", { n: shown }) : "";
+        countEl.textContent = total + matched;
+        try {
+          setLDJSON("ld-games", {
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            itemListElement: games.map(function (g, i) {
+              return {
+                "@type": "ListItem",
+                position: i + 1,
+                item: {
+                  "@type": "VideoGame",
+                  name: g.title,
+                  url: "https://game7k7k.github.io/guide.html?game=" + encodeURIComponent(g.id)
+                }
+              };
+            })
+          });
+        } catch (e) {
+          /* noop */
+        }
+        if (shown === 0) statusEl.textContent = window.__t ? window.__t("lib.none") : "No matching games";
+        else statusEl.textContent = "";
+      }
+
+      searchEl.addEventListener("input", render);
+
+      fetch((window.__asset ? window.__asset() : "") + "games.json", { cache: "no-store" })
+        .then(function (r) {
+          if (!r.ok) throw new Error("HTTP " + r.status);
+          return r.json();
+        })
+        .then(function (data) {
+          games = data;
+          render();
+        })
+        .catch(function (e) {
+          statusEl.textContent = (window.__t ? window.__t("lib.fail") : "Failed to load game list: ") + e.message;
+          statusEl.className = "error";
+        });
+    })();
+  </script>
+</body>
+</html>

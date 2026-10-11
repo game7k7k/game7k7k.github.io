@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title data-i18n="sitemap.h1">🗺️ Sitemap</title>
   <meta name="description" data-i18n-content="meta.sitemap" content="Sitemap of the game7k7k NES emulator site." />
-  <link rel="stylesheet" href="style.css?v=20261008-2" />
+  <link rel="stylesheet" href="style.css?v=20261011-2" />
   <meta name="theme-color" content="#0f1115" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <meta property="og:site_name" content="game7k7k NES Emulator" />
@@ -13,6 +13,9 @@
   <meta property="og:locale:alternate" content="zh_CN" />
   <meta name="twitter:card" content="summary" />
   <link rel="canonical" href="https://game7k7k.github.io/sitemap.html" />
+  <link rel="alternate" hreflang="en" href="https://game7k7k.github.io/sitemap.html" />
+  <link rel="alternate" hreflang="zh" href="https://game7k7k.github.io/zh/sitemap.html" />
+  <link rel="alternate" hreflang="x-default" href="https://game7k7k.github.io/sitemap.html" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Sitemap · game7k7k" />
   <meta property="og:description" content="Sitemap of the game7k7k NES emulator site: all pages and game guides." />
@@ -34,16 +37,13 @@
     <a href="index.html" class="brand"><h1 data-i18n="header.title">🎮 game7k7k · NES Online Emulator</h1></a>
     <span class="badge">jsnes</span>
     <p data-i18n="header.sub">Play instantly, no downloads. Keyboard / gamepad / touch supported.</p>
-    <span class="lang-select-wrap">
+    <span class="header-picks">
       <select id="source-select" data-sourceselect aria-label="ROM source">
         <option value="github">GitHub</option>
         <option value="jsdelivr">jsDelivr</option>
         <option value="gitee">Gitee</option>
       </select>
-      <select id="lang-select" data-langselect aria-label="Language">
-        <option value="en">English</option>
-        <option value="zh">中文</option>
-      </select>
+      <a class="lang-link" href="zh/sitemap.html">中文</a>
     </span>
   </header>
 
@@ -78,22 +78,21 @@
     <a href="sitemap.html" data-i18n="nav.sitemap">Sitemap</a>
   </footer>
 
-  <script src="i18n.js?v=20261008-2"></script>
+  <script src="i18n.js?v=20261011-2"></script>
   <script>
     (function () {
       "use strict";
       var list = document.getElementById("smap-guides");
-      function withLang(url) {
-        var lang = window.__getLang ? window.__getLang() : "en";
+      function withSource(url) {
         var source = window.__getSource ? window.__getSource() : "github";
-        return url + "&lang=" + lang + "&source=" + source;
+        return url + "&source=" + source;
       }
       function render(games) {
         list.innerHTML = "";
         games.forEach(function (g) {
           var li = document.createElement("li");
           var a = document.createElement("a");
-          a.href = withLang("guide.html?game=" + encodeURIComponent(g.id));
+          a.href = withSource("guide.html?game=" + encodeURIComponent(g.id));
           a.textContent = window.__gameTitle ? window.__gameTitle(g) : g.title;
           li.appendChild(a);
           var f = document.createElement("span");
@@ -103,10 +102,7 @@
           list.appendChild(li);
         });
       }
-      window.__onLangChange = function () {
-        if (window.__lastGames) render(window.__lastGames);
-      };
-      fetch("games.json", { cache: "no-store" })
+      fetch((window.__asset ? window.__asset() : "") + "games.json", { cache: "no-store" })
         .then(function (r) {
           if (!r.ok) throw new Error("games.json HTTP " + r.status);
           return r.json();

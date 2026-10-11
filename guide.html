@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title data-i18n="meta.guide">NES play guide</title>
   <meta name="description" data-i18n-content="meta.guide" content="Original NES play guide: overview, goal, controls and tips." />
-  <link rel="stylesheet" href="style.css?v=20261008-2" />
+  <link rel="stylesheet" href="style.css?v=20261011-2" />
   <meta name="theme-color" content="#0f1115" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <meta property="og:site_name" content="game7k7k NES Emulator" />
@@ -13,6 +13,9 @@
   <meta property="og:locale:alternate" content="zh_CN" />
   <meta name="twitter:card" content="summary" />
   <link rel="canonical" href="https://game7k7k.github.io/guide.html" />
+  <link rel="alternate" hreflang="en" href="https://game7k7k.github.io/guide.html" />
+  <link rel="alternate" hreflang="zh" href="https://game7k7k.github.io/zh/guide.html" />
+  <link rel="alternate" hreflang="x-default" href="https://game7k7k.github.io/guide.html" />
   <meta property="og:type" content="article" />
   <meta property="og:title" content="NES Play Guide · game7k7k" />
   <meta property="og:description" content="Original NES play guide: overview, goal, controls and tips." />
@@ -33,16 +36,13 @@
     <a href="index.html" class="brand"><h1 data-i18n="header.title">🎮 game7k7k · NES Online Emulator</h1></a>
     <span class="badge">jsnes</span>
     <p data-i18n="header.sub">Play instantly, no downloads. Keyboard / gamepad / touch supported.</p>
-    <span class="lang-select-wrap">
+    <span class="header-picks">
       <select id="source-select" data-sourceselect aria-label="ROM source">
         <option value="github">GitHub</option>
         <option value="jsdelivr">jsDelivr</option>
         <option value="gitee">Gitee</option>
       </select>
-      <select id="lang-select" data-langselect aria-label="Language">
-        <option value="en">English</option>
-        <option value="zh">中文</option>
-      </select>
+      <a class="lang-link" href="zh/guide.html">中文</a>
     </span>
   </header>
 
@@ -74,7 +74,7 @@
     <a href="sitemap.html" data-i18n="nav.sitemap">Sitemap</a>
   </footer>
 
-  <script src="i18n.js?v=20261008-2"></script>
+  <script src="i18n.js?v=20261011-2"></script>
   <script>
     (function () {
       "use strict";
@@ -110,16 +110,13 @@
           return null;
         }
       }
-      function lang() {
-        return window.__getLang ? window.__getLang() : "en";
+      function withSource(url) {
+        var sep = url.indexOf("?") < 0 ? "?" : "&";
+        var source = window.__getSource ? window.__getSource() : "github";
+        return url + sep + "source=" + source;
       }
       function titleOf(g) {
         return window.__gameTitle ? window.__gameTitle(g) : g.title;
-      }
-      function withLang(url) {
-        var sep = url.indexOf("?") < 0 ? "?" : "&";
-        var source = window.__getSource ? window.__getSource() : "github";
-        return url + sep + "lang=" + lang() + "&source=" + source;
       }
 
       function render() {
@@ -135,7 +132,7 @@
           document.title = window.__t ? window.__t("guide.notfound") : "Guide not found.";
           return;
         }
-        var zh = lang() === "zh";
+        var zh = (window.__getLang ? window.__getLang() : "en") === "zh";
         titleEl.textContent = titleOf(g) + " - " + (window.__t ? window.__t("guide.titleSuffix") : "Guide");
         document.title = titleEl.textContent;
         metaEl.textContent = (zh ? gd.genre : gd.genre_en) + " • " + g.file;
@@ -179,16 +176,16 @@
           /* noop */
         }
         playBtn.onclick = function () {
-          window.location.href = withLang("index.html?game=" + encodeURIComponent(g.id));
+          window.location.href = withSource("index.html?game=" + encodeURIComponent(g.id));
         };
         var idx = games.indexOf(g);
         var prev = games[(idx - 1 + games.length) % games.length];
         var next = games[(idx + 1) % games.length];
         prevBtn.onclick = function () {
-          window.location.href = withLang("guide.html?game=" + encodeURIComponent(prev.id));
+          window.location.href = withSource("guide.html?game=" + encodeURIComponent(prev.id));
         };
         nextBtn.onclick = function () {
-          window.location.href = withLang("guide.html?game=" + encodeURIComponent(next.id));
+          window.location.href = withSource("guide.html?game=" + encodeURIComponent(next.id));
         };
         relatedEl.innerHTML = "";
         games.forEach(function (o) {
@@ -196,20 +193,19 @@
           var a = document.createElement("button");
           a.textContent = titleOf(o);
           a.addEventListener("click", function () {
-            window.location.href = withLang("guide.html?game=" + encodeURIComponent(o.id));
+            window.location.href = withSource("guide.html?game=" + encodeURIComponent(o.id));
           });
           relatedEl.appendChild(a);
         });
       }
 
-      window.__onLangChange = render;
       currentId = qs("game");
       Promise.all([
-        fetch("games.json", { cache: "no-store" }).then(function (r) {
+        fetch((window.__asset ? window.__asset() : "") + "games.json", { cache: "no-store" }).then(function (r) {
           if (!r.ok) throw new Error("games.json HTTP " + r.status);
           return r.json();
         }),
-        fetch("guides.json", { cache: "no-store" }).then(function (r) {
+        fetch((window.__asset ? window.__asset() : "") + "guides.json", { cache: "no-store" }).then(function (r) {
           if (!r.ok) throw new Error("guides.json HTTP " + r.status);
           return r.json();
         })

@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title data-i18n="meta.title">game7k7k · NES 在线模拟器 (jsnes)</title>
-  <meta name="description" content="NES 在线模拟器，打开即玩，支持改键、手柄与触屏，并附原创游戏攻略。" />
+  <title data-i18n="meta.title">红白机在线玩 - 经典FC NES游戏大全 | game7k7k</title>
+  <meta name="description" content="免费红白机在线玩：在浏览器里重温小霸王经典FC游戏，即开即玩 NES Online Games，无需下载，支持改键、手柄与触屏，并附原创游戏攻略。" />
   <link rel="stylesheet" href="../style.css?v=20261011-2" />
   <meta name="theme-color" content="#0f1115" />
   <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
@@ -17,16 +17,16 @@
   <link rel="alternate" hreflang="zh" href="https://game7k7k.github.io/zh/" />
   <link rel="alternate" hreflang="x-default" href="https://game7k7k.github.io/" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="game7k7k · NES 在线模拟器 (jsnes)" />
-  <meta property="og:description" content="NES 在线模拟器，打开即玩，支持改键、手柄与触屏，并附原创游戏攻略。" />
+  <meta property="og:title" content="红白机在线玩 - 经典FC NES游戏大全 | game7k7k" />
+  <meta property="og:description" content="免费红白机在线玩：在浏览器里重温小霸王经典FC游戏，即开即玩 NES Online Games，无需下载，支持改键、手柄与触屏，并附原创游戏攻略。" />
   <meta property="og:url" content="https://game7k7k.github.io/zh/" />
-  <meta name="twitter:title" content="game7k7k · NES 在线模拟器 (jsnes)" />
-  <meta name="twitter:description" content="NES 在线模拟器，打开即玩，支持改键、手柄与触屏，并附原创游戏攻略。" />
+  <meta name="twitter:title" content="红白机在线玩 - 经典FC NES游戏大全 | game7k7k" />
+  <meta name="twitter:description" content="免费红白机在线玩：在浏览器里重温小霸王经典FC游戏，即开即玩 NES Online Games，无需下载，支持改键、手柄与触屏，并附原创游戏攻略。" />
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"game7k7k NES Emulator","url":"https://game7k7k.github.io/"}</script>
 </head>
 <body>
   <header>
-    <a href="index.html" class="brand"><h1 data-i18n="header.title">🎮 game7k7k · NES 在线模拟器</h1></a>
+    <a href="index.html" class="brand"><h1 data-i18n="home.h1">🎮 game7k7k 红白机在线玩 - 小霸王经典游戏</h1></a>
     <span class="badge">jsnes</span>
     <p data-i18n="header.sub">打开即玩，无需下载。键盘 / 手柄 / 触屏均可操作。</p>
     <span class="header-picks">
@@ -107,6 +107,11 @@
         P2 <span id="keys-p2"></span><br />
         <span data-i18n="help.gamepad">支持标准手柄即插即玩。</span>
       </div>
+
+      <div class="panel">
+        <b style="color:var(--text)" data-i18n="home.introTitle">浏览器免费重温小霸王红白机经典</b>
+        <p style="font-size:13px;line-height:1.8;margin:6px 0 0" data-i18n-html="home.intro">想玩免费 <a href="games.html">NES Online Games</a>（红白机 / 小霸王经典游戏）？game7k7k 让你在浏览器里即开即玩，无需下载安装。每款游戏都附带原创<a href="guide.html?game=snow-bros-j">玩法攻略</a>，支持改键、手柄与触屏。</p>
+      </div>
       <noscript>
         <div class="panel">
           <p style="font-size:13px">JavaScript is disabled. Browse the <a href="games.html">game library</a> and read the play guides: <a href="guide.html?game=snow-bros-j">Snow Bros.</a>, <a href="guide.html?game=lj65">LJ65 Tetris</a>, <a href="guide.html?game=croom">Croom</a>.</p>
@@ -125,7 +130,7 @@
 
   <!-- jsnes 官方构建（CDN）。也可自行 npm run build 后改用本地 dist/jsnes.min.js -->
   <script src="https://unpkg.com/jsnes@2.1.0/dist/jsnes.min.js"></script>
-  <script src="../i18n.js?v=20261011-2"></script>
+  <script src="../i18n.js?v=20261011-5"></script>
   <script src="../app.js?v=20261011-2"></script>
 </body>
 </html>

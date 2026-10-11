@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title data-i18n="lib.title">🎮 Game Library</title>
-  <meta name="description" data-i18n-content="meta.lib" content="Browse all NES games with play guides." />
+  <title data-i18n="lib.title">Free NES Online Games - Famicom Classics Library | game7k7k</title>
+  <meta name="description" data-i18n-content="Browse our classic collection of free NES online games, including Famicom classics. Play instantly in your browser; every NES game includes an original guide with controls and tips." content="Browse free NES online games and play instantly in your browser. Every NES game includes an original guide with controls and tips." />
   <link rel="stylesheet" href="style.css?v=20261011-2" />
   <meta name="theme-color" content="#0f1115" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
@@ -17,11 +17,11 @@
   <link rel="alternate" hreflang="zh" href="https://game7k7k.github.io/zh/games.html" />
   <link rel="alternate" hreflang="x-default" href="https://game7k7k.github.io/games.html" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="🎮 Game Library · game7k7k" />
-  <meta property="og:description" content="Browse all NES games with original play guides. Click Play to load instantly in the emulator." />
+  <meta property="og:title" content="Free NES Online Games - Famicom Classics Library | game7k7k" />
+  <meta property="og:description" content="Browse our classic collection of free NES online games, including Famicom classics. Play instantly in your browser; every NES game includes an original guide with controls and tips." />
   <meta property="og:url" content="https://game7k7k.github.io/games.html" />
-  <meta name="twitter:title" content="🎮 Game Library · game7k7k" />
-  <meta name="twitter:description" content="Browse all NES games with original play guides. Click Play to load instantly in the emulator." />
+  <meta name="twitter:title" content="Free NES Online Games - Famicom Classics Library | game7k7k" />
+  <meta name="twitter:description" content="Browse our classic collection of free NES online games, including Famicom classics. Play instantly in your browser; every NES game includes an original guide with controls and tips." />
   <style>
     .lib { max-width: 1000px; margin: 0 auto; padding: 16px 20px; }
     .lib-top { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
@@ -47,7 +47,7 @@
 </head>
 <body>
   <header>
-    <a href="index.html" class="brand"><h1 data-i18n="lib.title">🎮 Game Library</h1></a>
+    <a href="index.html" class="brand"><h1 data-i18n="lib.h1">Play Free Famicom & NES Online Games</h1></a>
     <p data-i18n="lib.sub">Click Play to jump back to the emulator and auto-load.</p>
     <span class="header-picks">
       <select id="source-select" data-sourceselect aria-label="ROM source">
@@ -65,6 +65,7 @@
       <input id="search" type="search" data-i18n-ph="lib.searchPh" placeholder="Search games…" />
       <span id="count" style="font-size:12px;color:var(--muted)"></span>
     </div>
+    <div class="panel" style="margin-bottom:12px"><p style="font-size:13px;margin:0" data-i18n-html="lib.intro">All <strong>NES online games free</strong> to play in your browser — a classic collection of Famicom and NES games. Pick any title below to start instantly, no downloads. Every game ships with an original guide covering controls and tips.</p></div>
     <div id="status" style="margin-bottom:10px" data-i18n="lib.loading">Loading…</div>
     <div class="grid" id="all-games"></div>
     <noscript>
@@ -81,7 +82,7 @@
     <a href="sitemap.html" data-i18n="nav.sitemap">Sitemap</a>
   </footer>
 
-  <script src="i18n.js?v=20261011-2"></script>
+  <script src="i18n.js?v=20261011-5"></script>
   <script>
     (function () {
       "use strict";
